@@ -1,25 +1,23 @@
-import logo from './logo.svg';
+// src/App.js
+import React, { useState } from 'react';
+import Upload from './components/Upload';
+import Player from './components/Player';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const [songUrl, setSongUrl] = useState('');
+
+    const handleUpload = (url) => {
+        setSongUrl(url);
+    };
+
+    return (
+        <div className="App">
+            <h1>Music Application</h1>
+            <Upload onUpload={handleUpload} />
+            <Player songUrl={songUrl} />
+        </div>
+    );
+};
 
 export default App;
