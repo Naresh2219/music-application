@@ -1,6 +1,7 @@
 // src/components/Upload.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import AudioPlayer from './AudioPlayer';
 
 const Upload = () => {
     const [file, setFile] = useState(null);
@@ -64,10 +65,7 @@ const Upload = () => {
                 {songsList.map((song, index) => (
                     <li key={index}>
                         <strong>{song.name}</strong> - {song.album}
-                        <audio controls>
-                            <source src={`http://localhost:5000${song.filePath}`} type="audio/mpeg" />
-                            Your browser does not support the audio element.
-                        </audio>
+                        <AudioPlayer songUrl={`http://localhost:5000${song.filePath}`} />
                     </li>
                 ))}
             </ul>
