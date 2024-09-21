@@ -1,37 +1,38 @@
 .song-list {
-    background-color: #121212; /* Dark background */
-    color: #ffffff; /* White text */
+    background-color: #191414;
+    color: #ffffff;
     padding: 20px;
     border-radius: 8px;
     max-width: 600px;
     margin: auto;
-}
-
-.song-item {
-    margin: 10px 0; 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; /* Space between play button and song name */
-}
-
-.play-button {
-    background-color: #1DB954; /* Spotify green */
-    color: #ffffff; /* White text */
-    border: none; 
-    border-radius: 5px; 
-    padding: 10px 15px; 
-    cursor: pointer; 
-    transition: background-color 0.3s; /* Transition effect */
-}
-
-.play-button:hover {
-    background-color: #1ed760; /* Lighter green on hover */
-}
-
-.playing {
-    background-color: #282828; /* Highlight currently playing song */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 h2 {
-    text-align: center; 
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.song-item {
+    margin: 15px 0;
+    padding: 10px;
+    background-color: #282828;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.song-item audio {
+    width: 70%;
+}
+
+.song-item p {
+    margin: 0;
+    padding-left: 10px;
 }
