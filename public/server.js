@@ -5,6 +5,10 @@ require('dotenv').config();
 
 const app = express();
 app.use(cors());
+app.use(cors({
+    origin:'*',
+    methods:['GET', 'POST'],
+}))
 app.use(express.json({ limit: '10mb' })); // Set limit for JSON requests
 app.use(express.urlencoded({ limit: '10mb', extended: true })); // Set limit for URL-encoded data
 
@@ -32,6 +36,7 @@ app.post('/upload', async (req, res) => {
             Key: `public/uploads/${fileName}`,  // Upload to 'public/uploads' folder
             Body: buffer,
             ContentType: 'audio/mp3',
+            ACL:'public-read'
         };
 
         const command = new PutObjectCommand(uploadParams);
