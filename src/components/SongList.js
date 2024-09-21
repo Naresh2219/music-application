@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './SongList.css'; // Import the CSS file
 
 const SongList = () => {
     const [songs, setSongs] = useState([]);
@@ -11,13 +12,12 @@ const SongList = () => {
     }, []);
 
     return (
-        <div>
+        <div className="song-list">
             <h2>Available Songs</h2>
             <ul>
                 {songs.map((song, index) => (
-                    <li key={index}>
+                    <li key={index} className="song-item">
                         <audio controls>
-                            {/* Use the song URL fetched from the server */}
                             <source src={song.url} type="audio/mp3" />
                             Your browser does not support the audio element.
                         </audio>
