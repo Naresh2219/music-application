@@ -30,7 +30,7 @@ app.post('/upload', async (req, res) => {
     const songFile = req.files.file;  // Assuming the file input is named 'file'
 
     const uploadParams = {
-        Bucket: 'your-s3-bucket-name',  // Replace with your actual S3 bucket name
+        Bucket: 'music-streming',  // Replace with your actual S3 bucket name
         Key: `uploads/${songFile.name}`, // File will be saved in the 'uploads' folder of your S3 bucket
         Body: songFile.data,
         ContentType: songFile.mimetype
