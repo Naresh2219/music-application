@@ -63,7 +63,7 @@ app.get('/songs', async (req, res) => {
         const songs = data.Contents.map(item => {
             return {
                 name: item.Key.split('/').pop(),  // Extract file name
-                url: `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${item.Key}`  // Construct the file URL
+                url: `https://${process.env.S3_BUCKET}.s3.amazonaws.com/${item.Key}`  // Construct the file URL
             };
         });
         res.json(songs);
@@ -72,6 +72,7 @@ app.get('/songs', async (req, res) => {
         res.status(500).send('Error listing songs');
     }
 });
+
 
 app.listen(5000, () => {
     console.log('Server is running on http://localhost:5000');
