@@ -1,22 +1,37 @@
 .song-list {
-    background-color: #121212; /* Dark background similar to Spotify */
-    color: #ffffff; /* White text color */
+    background-color: #121212; /* Dark background */
+    color: #ffffff; /* White text */
     padding: 20px;
-    border-radius: 8px; /* Rounded corners */
-    max-width: 600px; /* Max width for the list */
-    margin: auto; /* Center the list */
+    border-radius: 8px;
+    max-width: 600px;
+    margin: auto;
 }
 
 .song-item {
-    margin: 10px 0; /* Spacing between songs */
-    display: flex; /* Flex layout for audio and text */
-    align-items: center; /* Center items vertically */
+    margin: 10px 0; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; /* Space between play button and song name */
 }
 
-audio {
-    margin-right: 10px; /* Space between audio player and song name */
+.play-button {
+    background-color: #1DB954; /* Spotify green */
+    color: #ffffff; /* White text */
+    border: none; 
+    border-radius: 5px; 
+    padding: 10px 15px; 
+    cursor: pointer; 
+    transition: background-color 0.3s; /* Transition effect */
+}
+
+.play-button:hover {
+    background-color: #1ed760; /* Lighter green on hover */
+}
+
+.playing {
+    background-color: #282828; /* Highlight currently playing song */
 }
 
 h2 {
-    text-align: center; /* Center the heading */
+    text-align: center; 
 }
