@@ -11,7 +11,7 @@ const Upload = () => {
         const formData = new FormData();
         formData.append('file', file);
 
-        const response = await fetch('/upload', {
+        const response = await fetch('/uploads', {
             method: 'POST',
             body: formData,
         });
