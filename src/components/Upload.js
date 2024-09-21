@@ -1,74 +1,29 @@
-// src/components/Upload.js
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import AudioPlayer from './AudioPlayer';
+import React, { useState } from 'react';
 
 const Upload = () => {
     const [file, setFile] = useState(null);
-    const [albumName, setAlbumName] = useState('');
-    const [songsList, setSongsList] = useState([]);
 
-    useEffect(() => {
-        // Fetch the list of songs when the component mounts
-        const fetchSongs = async () => {
-            try {
-                const res = await axios.get('http://localhost:5000/songs');
-                setSongsList(res.data);
-            } catch (err) {
-                console.error('Error fetching songs list:', err);
-            }
-        };
-
-        fetchSongs();
-    }, []);
-
-    const handleFileChange = (event) => {
-        setFile(event.target.files[0]);
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
     };
 
     const handleUpload = async () => {
-        if (!file || !albumName) return;
-
         const formData = new FormData();
-        formData.append('song', file);
-        formData.append('albumName', albumName);
+        formData.append('file', file);
 
-        try {
-            const res = await axios.post('http://localhost:5000/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+        const response = await fetch('/upload', {
+            method: 'POST',
+            body: formData,
+        });
 
-            // Update the list of songs after a successful upload
-            setSongsList([...songsList, res.data]);
-            setFile(null);
-            setAlbumName('');
-        } catch (err) {
-            console.error('Error uploading file:', err);
-        }
+        const result = await response.json();
+        console.log(result);
     };
 
     return (
         <div>
-            <input 
-                type="text" 
-                placeholder="Album Name" 
-                value={albumName} 
-                onChange={(e) => setAlbumName(e.target.value)} 
-            />
             <input type="file" onChange={handleFileChange} />
-            <button onClick={handleUpload}>Upload Song</button>
-
-            <h3>Songs List:</h3>
-            <ul>
-                {songsList.map((song, index) => (
-                    <li key={index}>
-                        <strong>{song.name}</strong> - {song.album}
-                        <AudioPlayer songUrl={`http://localhost:5000${song.filePath}`} />
-                    </li>
-                ))}
-            </ul>
+            <button onClick={handleUpload}>Upload</button>
         </div>
     );
 };
