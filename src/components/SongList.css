@@ -1,5 +1,5 @@
 .song-list {
-    background-color: #191414;
+    background-color: #1DB954;
     color: #ffffff;
     padding: 20px;
     border-radius: 8px;
@@ -21,7 +21,7 @@ ul {
 .song-item {
     margin: 15px 0;
     padding: 10px;
-    background-color: #282828;
+    background-color: #ffff;
     border-radius: 5px;
     display: flex;
     align-items: center;
