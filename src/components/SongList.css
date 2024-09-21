@@ -1,0 +1,22 @@
+.song-list {
+    background-color: #121212; /* Dark background similar to Spotify */
+    color: #ffffff; /* White text color */
+    padding: 20px;
+    border-radius: 8px; /* Rounded corners */
+    max-width: 600px; /* Max width for the list */
+    margin: auto; /* Center the list */
+}
+
+.song-item {
+    margin: 10px 0; /* Spacing between songs */
+    display: flex; /* Flex layout for audio and text */
+    align-items: center; /* Center items vertically */
+}
+
+audio {
+    margin-right: 10px; /* Space between audio player and song name */
+}
+
+h2 {
+    text-align: center; /* Center the heading */
+}
