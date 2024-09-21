@@ -1,102 +1,61 @@
+
+const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3'); // AWS SDK v3
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-const mongoose = require('mongoose');
+require('dotenv').config(); // Load environment variables from .env file
 
 const app = express();
 const PORT = 5000;
 
-// MongoDB connection
-mongoose.connect('mongodb://127.0.0.1:27017/music-streaming', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => {
-  console.log('Connected to MongoDB');
-}).catch(err => {
-  console.error('MongoDB connection error:', err);
+// Configure S3 Client with v3 SDK
+const s3 = new S3Client({
+    region: 'us-east-1',
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    },
 });
-
-// Define Song Schema and Model
-const songSchema = new mongoose.Schema({
-  name: String,
-  album: String,
-  filePath: String
-});
-
-const Song = mongoose.model('Song', songSchema);
 
 // Middleware
-app.use(cors()); // Enable CORS
-app.use(express.static('public'));
+app.use(cors());
 app.use(express.json());
 app.use(fileUpload());
 
-// Handle file upload and store metadata in MongoDB
+// Upload file to S3
 app.post('/upload', async (req, res) => {
-  const albumName = req.body.albumName || 'Unknown Album';
+    const albumName = req.body.albumName || 'Unknown Album';
 
-  if (req.files && req.files.song) {
-    const song = req.files.song;
-    const uploadPath = path.join(__dirname, 'public', 'uploads', song.name);
+    if (req.files && req.files.song) {
+        const song = req.files.song;
 
-    // Ensure the uploads directory exists
-    const uploadsDir = path.join(__dirname, 'public', 'uploads');
-    if (!fs.existsSync(uploadsDir)) {
-      fs.mkdirSync(uploadsDir, { recursive: true });
+        const uploadParams = {
+            Bucket: 'music-streming', // Replace with your S3 bucket name
+            Key: song.name, // File name
+            Body: song.data, // File content
+            ContentType: song.mimetype, // MIME type
+        };
+
+        try {
+            // Upload the file using the PutObjectCommand from SDK v3
+            const data = await s3.send(new PutObjectCommand(uploadParams));
+            res.json({
+                fileName: song.name,
+                fileUrl: `https://${uploadParams.Bucket}.s3.amazonaws.com/${uploadParams.Key}`,
+                album: albumName,
+            });
+        } catch (err) {
+            console.error('Error uploading file:', err);
+            res.status(500).send('Failed to upload file');
+        }
+    } else {
+        res.status(400).send('No file uploaded');
     }
-
-    song.mv(uploadPath, async (err) => {
-      if (err) {
-        console.error('File upload error:', err);
-        return res.status(500).send(err);
-      }
-
-      // Store song metadata in MongoDB
-      const songInfo = new Song({
-        name: song.name,
-        album: albumName,
-        filePath: `/uploads/${song.name}`
-      });
-
-      try {
-        await songInfo.save();
-        res.send(songInfo);
-      } catch (error) {
-        console.error('Error saving song metadata to database:', error);
-        res.status(500).send('Error saving song metadata to database');
-      }
-    });
-  } else {
-    res.status(400).send('No file uploaded');
-  }
-});
-
-// Get list of songs from MongoDB
-app.get('/songs', async (req, res) => {
-  try {
-    const songs = await Song.find();
-    res.json(songs);
-  } catch (error) {
-    console.error('Error fetching songs from database:', error);
-    res.status(500).send('Error fetching songs from database');
-  }
-});
-
-// Serve uploaded songs
-app.get('/uploads/:filename', (req, res) => {
-  const filename = req.params.filename;
-  const filePath = path.join(__dirname, 'public', 'uploads', filename);
-
-  if (fs.existsSync(filePath)) {
-    res.sendFile(filePath);
-  } else {
-    res.status(404).send('File not found');
-  }
 });
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
