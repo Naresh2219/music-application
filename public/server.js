@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 app.use(cors({
     origin:'*',
-    methods:['GET', 'POST'],
+    methods:['GET', 'POST', 'OPTIONS'],
 }))
 app.use(express.json({ limit: '10mb' })); // Set limit for JSON requests
 app.use(express.urlencoded({ limit: '10mb', extended: true })); // Set limit for URL-encoded data
